@@ -1,0 +1,133 @@
+Index: src/HananExactNd.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/HananExactNd.java	(revision e60af6ba2dbf0cb9d2a0f297541871360d0bffc0)
++++ src/HananExactNd.java	(revision )
+@@ -7,34 +7,13 @@
+         add(new Vertex(2, 2, 4));
+         add(new Vertex(3, 4, 2));
+         add(new Vertex(4, 5, 3));
+-//        add(new Vertex(5, 6));
++        add(new Vertex(5, 2, 3));
+ //        add(new Vertex(6, 2));
+     }};
+ 
+ 
+-    private static HashSet<HashSet<Vertex>> powerSet (HashSet<Vertex> originalSet) {
+-        HashSet<HashSet<Vertex>> sets = new HashSet<>();
+-//        System.out.println(originalSet.size());
+-//        System.exit(0);
+ 
+-        List<Vertex> originalList = new ArrayList<>(originalSet);
+-        for(int i = 0; i < Math.pow(2, originalSet.size()); i++) {
+-            System.out.println(i);
+-            HashSet<Vertex> currentSet = new HashSet<>();
+-            int code = i;
+ 
+-            for (int j = 0; j < originalSet.size(); j++) {//convert to base currentVertex.size() and get the corresponding permutation
+-                int config = code % 2;
+-                code = code / 2;
+-                if (config == 0) currentSet.add(originalList.get(j));
+-            }
+-
+-            sets.add(currentSet);
+-        }
+-        return sets;
+-    }
+-
+-
+     /** Generating a set of vertices in the Hanan's grid (i.e. union of intersections of all d-hyperplanes, each passing through
+      * an observed point and parallel to exactly 1 axis), modelled by Hanan's theorem.
+      */
+@@ -126,10 +105,10 @@
+                 }
+                 graph[row][col] = distance;
+                 col++;
+-                System.out.print(distance + "  ");
++//                System.out.print(distance + "  ");
+ 
+             }
+-            System.out.println("");
++//            System.out.println("");
+             row++;
+         }
+ 
+@@ -143,17 +122,26 @@
+         //Initialize the Hanan grid
+         HashSet<Vertex> hananGrid = makeGrid();
+ 
+-        //Initialize possible set of vertices
+-        HashSet<HashSet<Vertex>> hananPowerSet = powerSet(hananGrid);
++//        System.out.println(hananGrid.size());
++//        System.exit(0);
+ 
+-        //Collect density
+-        int maxScore = findMaxScore(hananPowerSet);
+-        int[] scoreDensity = new int[maxScore + 1];
+-        for (HashSet<Vertex> set : hananPowerSet) {
+-            set.addAll(currentVertex);
+-            int[][] graph = distanceMatrix(set);
++        int[] scoreDensity = new int[100];
++        List<Vertex> originalList = new ArrayList<>(hananGrid);
++        for(int i = 0; i < Math.pow(2, hananGrid.size()); i++) {
++            System.out.println(i);
++            HashSet<Vertex> currentSet = new HashSet<>();
++            int code = i;
++
++            for (int j = 0; j < hananGrid.size(); j++) {//convert to base currentVertex.size() and get the corresponding permutation
++                int config = code % 2;
++                code = code / 2;
++                if (config == 0) currentSet.add(originalList.get(j));
++            }
++
++            currentSet.addAll(currentVertex);
++            int[][] graph = distanceMatrix(currentSet);
+             MST t = new MST();
+-            scoreDensity[t.primMST(graph, set.size())]++;
++            scoreDensity[t.primMST(graph, currentSet.size())]++;
+         }
+ 
+         for (int i = 0; i < scoreDensity.length; i++) {
+Index: src/MST.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/MST.java	(revision e60af6ba2dbf0cb9d2a0f297541871360d0bffc0)
++++ src/MST.java	(revision )
+@@ -28,13 +28,13 @@
+     private int printMST(int parent[], int graph[][], int V)
+     {
+         int weight = 0;
+-        System.out.println("Edge   Weight");
++//        System.out.println("Edge   Weight");
+         for (int i = 1; i < V; i++) {
+-            System.out.println(parent[i] + " - " + i + "    " +
+-                    graph[i][parent[i]]);
++//            System.out.println(parent[i] + " - " + i + "    " +
++//                    graph[i][parent[i]]);
+             weight += graph[i][parent[i]];
+         }
+-        System.out.println("weight is" + weight);
++//        System.out.println("weight is" + weight);
+         return weight;
+     }
+ 
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/vcs.xml	(revision )
++++ .idea/vcs.xml	(revision )
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file

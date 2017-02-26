@@ -28,13 +28,13 @@ class MST
     private int printMST(int parent[], int graph[][], int V)
     {
         int weight = 0;
-        System.out.println("Edge   Weight");
+//        System.out.println("Edge   Weight");
         for (int i = 1; i < V; i++) {
-            System.out.println(parent[i] + " - " + i + "    " +
-                    graph[i][parent[i]]);
+//            System.out.println(parent[i] + " - " + i + "    " +
+//                    graph[i][parent[i]]);
             weight += graph[i][parent[i]];
         }
-        System.out.println("weight is" + weight);
+//        System.out.println("weight is" + weight);
         return weight;
     }
 

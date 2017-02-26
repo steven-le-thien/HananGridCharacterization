@@ -7,32 +7,11 @@ public class HananExactNd {
         add(new Vertex(2, 2, 4));
         add(new Vertex(3, 4, 2));
         add(new Vertex(4, 5, 3));
-//        add(new Vertex(5, 6));
+        add(new Vertex(5, 2, 3));
 //        add(new Vertex(6, 2));
     }};
 
 
-    private static HashSet<HashSet<Vertex>> powerSet (HashSet<Vertex> originalSet) {
-        HashSet<HashSet<Vertex>> sets = new HashSet<>();
-//        System.out.println(originalSet.size());
-//        System.exit(0);
-
-        List<Vertex> originalList = new ArrayList<>(originalSet);
-        for(int i = 0; i < Math.pow(2, originalSet.size()); i++) {
-            System.out.println(i);
-            HashSet<Vertex> currentSet = new HashSet<>();
-            int code = i;
-
-            for (int j = 0; j < originalSet.size(); j++) {//convert to base currentVertex.size() and get the corresponding permutation
-                int config = code % 2;
-                code = code / 2;
-                if (config == 0) currentSet.add(originalList.get(j));
-            }
-
-            sets.add(currentSet);
-        }
-        return sets;
-    }
 
 
     /** Generating a set of vertices in the Hanan's grid (i.e. union of intersections of all d-hyperplanes, each passing through
@@ -126,10 +105,10 @@ public class HananExactNd {
                 }
                 graph[row][col] = distance;
                 col++;
-                System.out.print(distance + "  ");
+//                System.out.print(distance + "  ");
 
             }
-            System.out.println("");
+//            System.out.println("");
             row++;
         }
 
@@ -143,17 +122,26 @@ public class HananExactNd {
         //Initialize the Hanan grid
         HashSet<Vertex> hananGrid = makeGrid();
 
-        //Initialize possible set of vertices
-        HashSet<HashSet<Vertex>> hananPowerSet = powerSet(hananGrid);
+//        System.out.println(hananGrid.size());
+//        System.exit(0);
 
-        //Collect density
-        int maxScore = findMaxScore(hananPowerSet);
-        int[] scoreDensity = new int[maxScore + 1];
-        for (HashSet<Vertex> set : hananPowerSet) {
-            set.addAll(currentVertex);
-            int[][] graph = distanceMatrix(set);
+        int[] scoreDensity = new int[100];
+        List<Vertex> originalList = new ArrayList<>(hananGrid);
+        for(int i = 0; i < Math.pow(2, hananGrid.size()); i++) {
+            System.out.println(i);
+            HashSet<Vertex> currentSet = new HashSet<>();
+            int code = i;
+
+            for (int j = 0; j < hananGrid.size(); j++) {//convert to base currentVertex.size() and get the corresponding permutation
+                int config = code % 2;
+                code = code / 2;
+                if (config == 0) currentSet.add(originalList.get(j));
+            }
+
+            currentSet.addAll(currentVertex);
+            int[][] graph = distanceMatrix(currentSet);
             MST t = new MST();
-            scoreDensity[t.primMST(graph, set.size())]++;
+            scoreDensity[t.primMST(graph, currentSet.size())]++;
         }
 
         for (int i = 0; i < scoreDensity.length; i++) {
